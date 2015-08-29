@@ -8,28 +8,36 @@ import javax.swing.*;
  *
  * @author dav
  */
-public class CalcFrame extends javax.swing.JFrame {
+public class CalcFrame extends JFrame {
 
     double expression1, expression2;
     double solution;
     String operator;
     boolean solved = false;
+    boolean error = false;
     /**
      * Creates new form CalcFrame
      */
     public CalcFrame() {
         initComponents();
     }
-
+    
     public void displayValue(JButton button){
+        if(solved)
+            reset();
         String value;
         value = jTextPane_screen.getText() + button.getText();
-        jTextPane_screen.setText(value); 
+        jTextPane_screen.setText(value);
     }
     
     public void getExpression1(){
-        expression1 = Double.parseDouble(jTextPane_screen.getText());
-        jTextPane_screen.setText("");        
+        try{
+            expression1 = Double.parseDouble(jTextPane_screen.getText());
+            jTextPane_screen.setText("");
+        } catch (Exception ex){
+            jTextPane_screen.setText("Error!");
+            error = true;
+        }
     }
     
     public void reset(){
@@ -38,12 +46,19 @@ public class CalcFrame extends javax.swing.JFrame {
         solution = 0;
         operator = null;
         solved = false;
+        error = false;
         jTextPane_screen.setText("");
-    }
+    }        
     
     public void solve(){
         if(!operator.equalsIgnoreCase("²") && !operator.equalsIgnoreCase("√"))
-            expression2 = Double.parseDouble(jTextPane_screen.getText());
+            try{
+                expression2 = Double.parseDouble(jTextPane_screen.getText());
+            } catch (Exception ex){
+                jTextPane_screen.setText("Error!");
+                solved = true;
+                return;
+            }
         
         switch(operator){
             case "+": 
@@ -107,7 +122,9 @@ public class CalcFrame extends javax.swing.JFrame {
         jButton_equals = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Calculator");
         setBackground(new java.awt.Color(158, 158, 159));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(181, 181, 181));
 
@@ -322,6 +339,16 @@ public class CalcFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane1)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton_0, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton_1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton_2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jButton_7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -337,35 +364,27 @@ public class CalcFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton_9)))
                         .addGap(8, 8, 8)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton_multiply, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
-                            .addComponent(jButton_divide, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton_minus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_clear))
-                            .addComponent(jButton_equals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_power, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_root, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_0)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_point, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton_2)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton_3)
-                            .addComponent(jButton_plus))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jButton_multiply, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                                    .addComponent(jButton_divide, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton_minus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton_delete, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton_clear))
+                                    .addComponent(jButton_equals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jButton_power, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jButton_root, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton_point, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton_plus)))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -410,8 +429,8 @@ public class CalcFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -426,116 +445,109 @@ public class CalcFrame extends javax.swing.JFrame {
 
     private void jButton_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_0ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_0);
     }//GEN-LAST:event_jButton_0ActionPerformed
   
     private void jButton_pointActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_pointActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_point);
     }//GEN-LAST:event_jButton_pointActionPerformed
 
     private void jButton_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_1ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_1);
     }//GEN-LAST:event_jButton_1ActionPerformed
 
     private void jButton_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_2ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_2);
     }//GEN-LAST:event_jButton_2ActionPerformed
 
     private void jButton_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_3ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_3);
     }//GEN-LAST:event_jButton_3ActionPerformed
 
     private void jButton_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_4ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_4);
     }//GEN-LAST:event_jButton_4ActionPerformed
 
     private void jButton_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_5ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_5);
     }//GEN-LAST:event_jButton_5ActionPerformed
 
     private void jButton_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_6ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_6);
     }//GEN-LAST:event_jButton_6ActionPerformed
 
     private void jButton_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_7ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_7);
     }//GEN-LAST:event_jButton_7ActionPerformed
 
     private void jButton_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_8ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_8);
     }//GEN-LAST:event_jButton_8ActionPerformed
 
     private void jButton_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_9ActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            reset();
         displayValue(jButton_9);
     }//GEN-LAST:event_jButton_9ActionPerformed
 
     private void jButton_plusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_plusActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            solved = false;
-        getExpression1();
-        operator = "+";
+        operatorButton(jButton_plus);
     }//GEN-LAST:event_jButton_plusActionPerformed
 
     private void jButton_minusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_minusActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            solved = false;
-        getExpression1();
-        operator = "-";
+        operatorButton(jButton_minus);
     }//GEN-LAST:event_jButton_minusActionPerformed
 
     private void jButton_multiplyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_multiplyActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            solved = false;
-        getExpression1();
-        operator = "x";
+        operatorButton(jButton_multiply);
     }//GEN-LAST:event_jButton_multiplyActionPerformed
 
     private void jButton_divideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_divideActionPerformed
         // TODO add your handling code here:
+        operatorButton(jButton_divide);
+    }//GEN-LAST:event_jButton_divideActionPerformed
+
+    public void operatorButton(JButton button){
         if(solved)
             solved = false;
         getExpression1();
-        operator = "/";
-    }//GEN-LAST:event_jButton_divideActionPerformed
-
+        if(error == false){
+            if(button == jButton_plus)
+                operator = "+";
+            if(button == jButton_minus)
+                operator = "-";
+            if(button == jButton_multiply)
+                operator = "x";
+            if(button == jButton_divide)
+                operator = "/";
+        } else {
+            error = false;
+            solved = true;
+        }
+        
+    }
+    
     private void jButton_equalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_equalsActionPerformed
         // TODO add your handling code here:
-        solve();
+        try{
+            if(solved == true)
+                reset();
+            else
+                solve();
+        } catch (Exception ex){
+            
+        }
     }//GEN-LAST:event_jButton_equalsActionPerformed
 
     private void jButton_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_clearActionPerformed
@@ -545,22 +557,33 @@ public class CalcFrame extends javax.swing.JFrame {
 
     private void jButton_powerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_powerActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            solved = false;
-        expression1 = Double.parseDouble(jTextPane_screen.getText());
-        operator = "²";
-        jTextPane_screen.setText(jTextPane_screen.getText() + operator);
+        specialButton(jButton_power);
     }//GEN-LAST:event_jButton_powerActionPerformed
 
     private void jButton_rootActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rootActionPerformed
         // TODO add your handling code here:
-        if(solved)
-            solved = false;
-        expression1 = Double.parseDouble(jTextPane_screen.getText());
-        operator = "√";
-        jTextPane_screen.setText(operator + jTextPane_screen.getText());
+        specialButton(jButton_root);
     }//GEN-LAST:event_jButton_rootActionPerformed
 
+    public void specialButton(JButton button){
+        if(solved)
+            solved = false;
+        try{
+            expression1 = Double.parseDouble(jTextPane_screen.getText());
+            if(button == jButton_power){
+                operator = "²";
+                jTextPane_screen.setText(jTextPane_screen.getText() + operator);
+            }
+            if(button == jButton_root){
+                operator = "√";
+                jTextPane_screen.setText(operator + jTextPane_screen.getText());
+            }
+        } catch (Exception ex){
+            jTextPane_screen.setText("Error!");
+            solved = true;
+        }
+    }    
+    
     private void jButton_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_deleteActionPerformed
         // TODO add your handling code here:
         StringBuilder sb = new StringBuilder(jTextPane_screen.getText());
@@ -597,6 +620,7 @@ public class CalcFrame extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new CalcFrame().setVisible(true);
             }
