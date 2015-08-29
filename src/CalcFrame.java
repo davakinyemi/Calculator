@@ -10,11 +10,11 @@ import javax.swing.*;
  */
 public class CalcFrame extends JFrame {
 
-    double expression1, expression2;
+    double expression1, expression2; // values
     double solution;
     String operator;
-    boolean solved = false;
-    boolean error = false;
+    boolean solved = false; // conditional variable to check if problem as been solved
+    boolean error = false; // coditional variable to check if error has occured
     /**
      * Creates new form CalcFrame
      */
@@ -22,17 +22,19 @@ public class CalcFrame extends JFrame {
         initComponents();
     }
     
+    // method to display values on "screen"
     public void displayValue(JButton button){
-        if(solved)
+        if(solved) 
             reset();
         String value;
         value = jTextPane_screen.getText() + button.getText();
         jTextPane_screen.setText(value);
     }
     
+    // method to get the first expression
     public void getExpression1(){
         try{
-            expression1 = Double.parseDouble(jTextPane_screen.getText());
+            expression1 = Double.parseDouble(jTextPane_screen.getText()); 
             jTextPane_screen.setText("");
         } catch (Exception ex){
             jTextPane_screen.setText("Error!");
@@ -40,6 +42,7 @@ public class CalcFrame extends JFrame {
         }
     }
     
+    // method to reset all variables
     public void reset(){
         expression1 = 0;
         expression2 = 0;
@@ -50,8 +53,9 @@ public class CalcFrame extends JFrame {
         jTextPane_screen.setText("");
     }        
     
+    // method to solve expression using switch statement
     public void solve(){
-        if(!operator.equalsIgnoreCase("²") && !operator.equalsIgnoreCase("√"))
+        if(!operator.equalsIgnoreCase("²") && !operator.equalsIgnoreCase("√")) // check for special cases (power and root)
             try{
                 expression2 = Double.parseDouble(jTextPane_screen.getText());
             } catch (Exception ex){
@@ -518,6 +522,7 @@ public class CalcFrame extends JFrame {
         operatorButton(jButton_divide);
     }//GEN-LAST:event_jButton_divideActionPerformed
 
+    // set operator value depending on button pressed
     public void operatorButton(JButton button){
         if(solved)
             solved = false;
@@ -538,6 +543,7 @@ public class CalcFrame extends JFrame {
         
     }
     
+    // =
     private void jButton_equalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_equalsActionPerformed
         // TODO add your handling code here:
         try{
@@ -550,21 +556,25 @@ public class CalcFrame extends JFrame {
         }
     }//GEN-LAST:event_jButton_equalsActionPerformed
 
+    // clear screen
     private void jButton_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_clearActionPerformed
         // TODO add your handling code here:
         reset();
     }//GEN-LAST:event_jButton_clearActionPerformed
 
+    // power
     private void jButton_powerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_powerActionPerformed
         // TODO add your handling code here:
         specialButton(jButton_power);
     }//GEN-LAST:event_jButton_powerActionPerformed
 
+    // root
     private void jButton_rootActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_rootActionPerformed
         // TODO add your handling code here:
         specialButton(jButton_root);
     }//GEN-LAST:event_jButton_rootActionPerformed
 
+    // set operator for special cases (power and root)
     public void specialButton(JButton button){
         if(solved)
             solved = false;
@@ -584,6 +594,7 @@ public class CalcFrame extends JFrame {
         }
     }    
     
+    // delete 
     private void jButton_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_deleteActionPerformed
         // TODO add your handling code here:
         StringBuilder sb = new StringBuilder(jTextPane_screen.getText());
